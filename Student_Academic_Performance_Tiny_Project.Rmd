@@ -1,0 +1,275 @@
+---
+title: "Tiny Project: Analysis of Student Academic Performance"
+author: "WAI PHYO AUNG"
+date: "09-09-2026"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# 1. Introduction
+
+Student academic performance can be influenced by several factors, including regular attendance and participation in class. In this Tiny Project, student data is analyzed using R and R Markdown.
+
+The project focuses on marks, attendance, gender, and final result. Different statistical measures and graphs are used to understand the data and identify patterns.
+
+# 2. Objectives
+
+The main objectives of this project are:
+
+- To import student data into R.
+- To inspect and understand the structure of the dataset.
+- To check and handle missing values.
+- To calculate descriptive statistics for student marks.
+- To study the distribution of gender and results.
+- To create suitable graphs and plots.
+- To examine the relationship between attendance and marks.
+- To interpret the results and present important findings.
+
+# 3. Data Importing
+
+The dataset is stored in a CSV file named `student_data_tiny_project.csv`.
+
+The `read.csv()` function is used to import the CSV file into R.
+
+```{r import-data}
+student_data <- read.csv("student_data_tiny_project.csv")
+student_data
+```
+
+**Code explanation:**  
+`read.csv()` reads the CSV file and stores the data in the object `student_data`. The last line displays the complete dataset.
+
+# 4. Data Inspection
+
+## First few observations
+
+```{r head-data}
+head(student_data)
+```
+
+**Code explanation:**  
+The `head()` function displays the first six observations. It helps us quickly understand the contents of the dataset.
+
+## Dataset structure
+
+```{r structure}
+str(student_data)
+```
+
+**Code explanation:**  
+The `str()` function shows the number of observations, variables, column names, and the data type of each variable.
+
+## Summary of the dataset
+
+```{r summary}
+summary(student_data)
+```
+
+**Code explanation:**  
+The `summary()` function provides a statistical summary of numeric variables and basic information about categorical variables.
+
+# 5. Data Preprocessing and Cleaning
+
+Before analysis, missing values should be checked.
+
+```{r missing-values}
+colSums(is.na(student_data))
+```
+
+**Code explanation:**  
+`is.na()` identifies missing values, while `colSums()` counts the missing values in each column.
+
+In this dataset, the values are complete, so no rows need to be removed or replaced.
+
+We also check for duplicated rows:
+
+```{r duplicates}
+sum(duplicated(student_data))
+```
+
+**Code explanation:**  
+`duplicated()` identifies duplicate observations and `sum()` counts them.
+
+# 6. Statistical Analysis
+
+## Measures of central tendency and variation
+
+```{r statistics}
+mean(student_data$Marks)
+median(student_data$Marks)
+var(student_data$Marks)
+sd(student_data$Marks)
+min(student_data$Marks)
+max(student_data$Marks)
+```
+
+**Code explanation:**  
+
+- `mean()` calculates the average marks.
+- `median()` calculates the middle value.
+- `var()` calculates variance.
+- `sd()` calculates standard deviation.
+- `min()` and `max()` identify the lowest and highest marks.
+
+### Interpretation
+
+The average and median marks give an indication of the overall academic performance of the students. Variance and standard deviation show how much the marks differ from one student to another.
+
+## Gender frequency
+
+```{r gender-frequency}
+gender_count <- table(student_data$Gender)
+gender_count
+```
+
+**Code explanation:**  
+The `table()` function counts the number of students in each gender category.
+
+## Result frequency
+
+```{r result-frequency}
+result_count <- table(student_data$Result)
+result_count
+```
+
+**Code explanation:**  
+The `table()` function is also used here to count students according to their final result.
+
+# 7. Graphical Analysis
+
+## Gender Distribution
+
+```{r gender-pie}
+pie(
+  gender_count,
+  main = "Gender Distribution",
+  labels = paste(names(gender_count), gender_count)
+)
+```
+
+**Interpretation:**  
+The pie chart shows the distribution of students by gender. The labels display both the category and its frequency.
+
+## Student Result Distribution
+
+```{r result-pie}
+pie(
+  result_count,
+  main = "Student Result Distribution",
+  labels = paste(names(result_count), result_count)
+)
+```
+
+**Interpretation:**  
+The result pie chart shows the number of students who passed and failed. It provides a quick visual understanding of overall results.
+
+## Student Marks
+
+```{r marks-barplot}
+barplot(
+  student_data$Marks,
+  names.arg = student_data$Name,
+  main = "Student Marks",
+  xlab = "Students",
+  ylab = "Marks",
+  las = 2
+)
+```
+
+**Code explanation:**  
+`barplot()` creates a bar graph. `names.arg` displays student names on the x-axis and `las = 2` rotates the labels so they are easier to read.
+
+**Interpretation:**  
+The graph makes it easy to compare marks between individual students and identify students with relatively high or low marks.
+
+## Student Attendance
+
+```{r attendance-barplot}
+barplot(
+  student_data$Attendance,
+  names.arg = student_data$Name,
+  main = "Student Attendance",
+  xlab = "Students",
+  ylab = "Attendance (%)",
+  las = 2
+)
+```
+
+**Interpretation:**  
+The attendance bar chart compares attendance percentages across students. Students with higher attendance can be identified directly from the graph.
+
+# 8. Correlation Analysis
+
+The relationship between attendance and marks is examined using correlation.
+
+```{r correlation}
+cor(
+  student_data$Attendance,
+  student_data$Marks
+)
+```
+
+**Code explanation:**  
+The `cor()` function calculates the Pearson correlation coefficient between attendance and marks.
+
+A positive correlation means that higher attendance tends to be associated with higher marks. A value close to 1 indicates a strong positive relationship, while a value close to 0 indicates a weak linear relationship.
+
+# 9. Attendance vs Marks Plot
+
+```{r attendance-marks-plot}
+plot(
+  student_data$Attendance,
+  student_data$Marks,
+  main = "Attendance vs Marks",
+  xlab = "Attendance (%)",
+  ylab = "Marks",
+  pch = 19
+)
+```
+
+**Code explanation:**  
+The `plot()` function creates a scatter plot. Attendance is placed on the x-axis and marks on the y-axis. Each point represents one student.
+
+**Interpretation:**  
+The scatter plot helps visualize whether students with better attendance generally achieve higher marks. An upward pattern indicates a positive relationship.
+
+# 10. Findings
+
+Based on the analysis:
+
+1. The dataset contains information about students' names, gender, marks, attendance, and results.
+2. Missing-value and duplicate checks are performed before analysis.
+3. Descriptive statistics provide an overview of student marks.
+4. Pie charts show the distribution of gender and final results.
+5. Bar charts allow comparison of individual students' marks and attendance.
+6. Correlation analysis measures the relationship between attendance and marks.
+7. The attendance-versus-marks scatter plot provides a visual representation of this relationship.
+
+# 11. Conclusion
+
+This Tiny Project demonstrates how R can be used to import, inspect, clean, analyze, and visualize student data.
+
+The project uses basic statistical measures, frequency tables, pie charts, bar plots, correlation, and a scatter plot. These techniques provide a simple but useful way to understand student academic performance and investigate the relationship between attendance and marks.
+
+# 12. Overall R Functions Used
+
+| Function | Purpose |
+|---|---|
+| `read.csv()` | Import CSV data |
+| `head()` | Display first observations |
+| `str()` | Display dataset structure |
+| `summary()` | Generate summary statistics |
+| `is.na()` | Detect missing values |
+| `duplicated()` | Detect duplicate rows |
+| `table()` | Create frequency counts |
+| `mean()` | Calculate mean |
+| `median()` | Calculate median |
+| `var()` | Calculate variance |
+| `sd()` | Calculate standard deviation |
+| `pie()` | Create pie chart |
+| `barplot()` | Create bar chart |
+| `cor()` | Calculate correlation |
+| `plot()` | Create scatter plot |
